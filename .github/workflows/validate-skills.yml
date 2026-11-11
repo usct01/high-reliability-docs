@@ -1,0 +1,30 @@
+name: Validate Agent Skills
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-skills:
+    name: Validate SKILL.md Schemas & Document Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify installer script permissions and syntax
+        run: |
+          bash -n install.sh
+          chmod +x install.sh
+
+      - name: Run repository skill schema & linter self-tests
+        run: |
+          python3 scripts/lint_repo.py
